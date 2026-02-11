@@ -1,0 +1,608 @@
+:root {
+    --bg-color: #0f172a;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-color: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.3);
+    --income-color: #22c55e;
+    --expense-color: #ef4444;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --font-main: 'Outfit', sans-serif;
+    --transition-speed: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+    /* Prevent scroll on main view */
+    display: flex;
+    justify-content: center;
+    background: radial-gradient(circle at top left, #1e293b, #0f172a);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 600px;
+    /* Tablet/Desktop constraint */
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: flex-end;
+    /* Menu on the right as per request "в углу" - usually right or left. Request said "в углу три чёрточки". Right is standard for mobile hamburger usually, but left is also common. Let's stick to Right corner based on "в углу" often implying top-right contextually, but left is fine too. Let's go Top Right. */
+    padding: 10px 0;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background var(--transition-speed);
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.balance-container {
+    margin-bottom: 20vh;
+    /* Visual balance */
+    animation: fadeIn 1s ease-out;
+}
+
+.label {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#balance-amount {
+    font-size: 4rem;
+    font-weight: 600;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+#balance-amount .balance-subtitle {
+    font-size: 1rem;
+    letter-spacing: normal;
+    /* Fix overlapping text */
+    display: block;
+    margin-top: 5px;
+    color: var(--text-secondary);
+    -webkit-text-fill-color: var(--text-secondary);
+    /* Override gradient */
+    text-shadow: none;
+    font-weight: 400;
+    line-height: normal;
+}
+
+/* FAB */
+.fab {
+    position: absolute;
+    bottom: 40px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    /* background: var(--accent-color); */
+    background: rgb(from var(--accent-color) r g b / 0.3);
+    border: none;
+    /* color: #fff; */
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 2rem;
+    /* Plus icon size */
+    box-shadow: 0 10px 25px var(--accent-glow);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fab:active {
+    transform: translateX(50%) scale(0.9);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: flex-end;
+    /* Bottom sheet on mobile */
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-speed);
+    z-index: 100;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 600px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px 20px 0 0;
+    padding: 25px;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(100%);
+    transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.glass-panel {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.modal-header h2,
+.sidebar-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.transaction-type-selector {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 5px;
+    margin-bottom: 25px;
+}
+
+.type-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 12px;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.type-btn.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.type-btn.active[data-type="income"] {
+    background: var(--income-color);
+}
+
+.type-btn.active[data-type="expense"] {
+    background: var(--expense-color);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+}
+
+.currency-symbol {
+    font-size: 2rem;
+    color: var(--text-secondary);
+    margin-right: 10px;
+}
+
+#amount-input {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.5rem;
+    font-family: inherit;
+    font-weight: 600;
+    outline: none;
+    text-align: right;
+    /* Adjust alignment if needed with selector on left */
+    flex: 1;
+}
+
+.currency-select {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    font-size: 2rem;
+    font-family: inherit;
+    font-weight: 600;
+    margin-right: 10px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    /* Remove default arrow */
+    -webkit-appearance: none;
+    text-align: center;
+}
+
+.currency-select option {
+    background: var(--bg-color);
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+/* Secondary Balances & Debts */
+.secondary-balances {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-height: 20px;
+}
+
+.secondary-balance-item {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    opacity: 0.8;
+}
+
+.debts-container {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.debt-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.debt-info {
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.debt-amount {
+    font-weight: 600;
+}
+
+.debt-amount.positive {
+    color: var(--income-color);
+}
+
+.debt-amount.negative {
+    color: var(--expense-color);
+}
+
+/* Debt Form Elements */
+.debt-toggle-container {
+    margin-bottom: 20px;
+}
+
+.debt-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-primary);
+    user-select: none;
+}
+
+.debt-checkbox-label input {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.debt-checkbox-label input:checked~.checkmark {
+    background: var(--accent-color);
+}
+
+.debt-checkbox-label input:checked~.checkmark::after {
+    content: '✔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    color: white;
+}
+
+.debt-details {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    overflow: hidden;
+}
+
+.debt-details.hidden {
+    display: none;
+}
+
+.transaction-type-selector.small {
+    margin-bottom: 15px;
+}
+
+.transaction-type-selector.small .type-btn {
+    padding: 8px;
+    font-size: 0.9rem;
+}
+
+.input-group-simple {
+    margin-bottom: 0;
+}
+
+#counterparty-input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+}
+
+#counterparty-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.counterparty-list {
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.counterparty-list li {
+    padding: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Menu Settings */
+.menu-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.menu-label {
+    display: block;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.menu-select {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+}
+
+.menu-select option {
+    background: var(--bg-color);
+}
+
+#amount-input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.primary-btn {
+    width: 100%;
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 18px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--accent-glow);
+    transition: transform 0.2s;
+}
+
+.primary-btn:active {
+    transform: scale(0.98);
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80%;
+    max-width: 300px;
+    height: 100%;
+    background: #1e293b;
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform var(--transition-speed);
+    padding: 20px;
+    border-left: 1px solid var(--glass-border);
+}
+
+.sidebar.active {
+    transform: translateX(0);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.menu-items {
+    list-style: none;
+}
+
+.menu-items li {
+    margin-bottom: 20px;
+}
+
+.menu-items a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.menu-items a:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 150;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-speed);
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* iPad / Desktop Logic */
+@media (min-width: 768px) {
+    .modal {
+        align-items: center;
+    }
+
+    .modal-content {
+        border-radius: 20px;
+        max-width: 450px;
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+    }
+
+    .modal.active .modal-content {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    .fab {
+        right: 40px;
+        bottom: 40px;
+        transform: none;
+    }
+
+    .fab:active {
+        transform: scale(0.9);
+    }
+}

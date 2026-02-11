@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Бюджет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <header>
+            <button id="menu-btn" class="icon-btn" aria-label="Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </header>
+
+        <main>
+            <div class="balance-container">
+                <span class="label">У меня</span>
+                <h1 id="balance-amount">$0</h1>
+                <div id="secondary-balances" class="secondary-balances">
+                    <!-- Javascript will populate this -->
+                </div>
+            </div>
+
+            <div id="debts-container" class="debts-container">
+                <!-- Javascript will populate debts here -->
+            </div>
+        </main>
+
+        <button id="add-btn" class="fab" aria-label="Add Transaction">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Добавить операцию</h2>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="transaction-type-selector">
+                    <button class="type-btn active" data-type="income">Доход</button>
+                    <button class="type-btn" data-type="expense">Расход</button>
+                </div>
+
+                <div class="debt-toggle-container">
+                    <label class="debt-checkbox-label">
+                        <input type="checkbox" id="is-debt-checkbox">
+                        <span class="checkmark"></span>
+                        Это долг
+                    </label>
+                </div>
+
+                <div id="debt-details" class="debt-details hidden">
+                     <div class="debt-toggle-container" style="margin-bottom: 15px;">
+                        <label class="debt-checkbox-label">
+                            <input type="checkbox" id="is-repayment-checkbox">
+                            <span class="checkmark"></span>
+                            Возвращение долга
+                        </label>
+                    </div>
+                    <div class="transaction-type-selector small">
+                        <button class="type-btn active" data-debt-type="lend">Я дал</button>
+                        <button class="type-btn" data-debt-type="borrow">Я взял</button>
+                    </div>
+                    <div class="input-group-simple">
+                        <input type="text" id="counterparty-input" placeholder="Имя (кому/от кого)"
+                            list="counterparty-list">
+                        <datalist id="counterparty-list">
+                            <!-- JS populates -->
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <select id="currency-selector" class="currency-select">
+                        <option value="USD">$</option>
+                        <option value="EUR">€</option>
+                        <option value="RUB">₽</option>
+                        <option value="KRW">₩</option>
+                    </select>
+                    <input type="number" id="amount-input" placeholder="0" inputmode="decimal">
+                </div>
+                <button id="save-transaction" class="primary-btn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for menu (optional for future use) -->
+    <div id="menu-overlay" class="overlay"></div>
+
+    <!-- Sidebar Menu -->
+    <div id="sidebar" class="sidebar glass-panel">
+        <div class="sidebar-header">
+            <h2>Меню</h2>
+            <button id="close-sidebar" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="menu-section">
+            <label for="default-currency-setting" class="menu-label">Основная валюта</label>
+            <select id="default-currency-setting" class="menu-select">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="RUB">RUB (₽)</option>
+                <option value="KRW">KRW (₩)</option>
+            </select>
+        </div>
+
+        <div class="menu-section">
+            <span class="menu-label">Контрагенты</span>
+            <ul id="counterparty-menu-list" class="counterparty-list">
+                <!-- JS populates -->
+            </ul>
+        </div>
+
+        <ul class="menu-items">
+            <li><a href="#" id="reset-data"><i class="fa-solid fa-rotate-right"></i> Сбросить данные</a></li>
+        </ul>
+    </div>
+
+</body>
+
+</html>
