@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="debt-details" class="debt-details hidden">
-                     <div class="debt-toggle-container" style="margin-bottom: 15px;">
+                    <div class="debt-toggle-container" style="margin-bottom: 15px;">
                         <label class="debt-checkbox-label">
                             <input type="checkbox" id="is-repayment-checkbox">
                             <span class="checkmark"></span>
@@ -97,6 +97,21 @@
                     <input type="number" id="amount-input" placeholder="0" inputmode="decimal">
                 </div>
                 <button id="save-transaction" class="primary-btn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal (History / Debt List) -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2 id="details-title">Details</h2>
+                <button id="close-details-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul id="details-list" class="details-list">
+                    <!-- JS populates -->
+                </ul>
             </div>
         </div>
     </div>

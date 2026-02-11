@@ -606,3 +606,70 @@ main {
         transform: scale(0.9);
     }
 }
+
+/* Details List Styles */
+.details-list {
+    list-style: none;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 5px;
+    /* Space for scrollbar */
+}
+
+.details-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.details-item:last-child {
+    margin-bottom: 0;
+}
+
+.details-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.details-date {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.details-desc {
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.details-amount {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.details-amount.income {
+    color: var(--income-color);
+}
+
+.details-amount.expense {
+    color: var(--expense-color);
+}
+
+/* Interaction Feedback */
+.balance-subtitle,
+.debt-card,
+.menu-items li {
+    user-select: none;
+    /* Prevent text selection during long press */
+    transition: opacity 0.2s;
+}
+
+.balance-subtitle:active,
+.debt-card:active {
+    opacity: 0.7;
+}
